@@ -77,6 +77,24 @@ const registerUser = async (req, res) => {
 }
 
 const adminLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ message: "Please fill all the fields" });
+        }
+
+        if(email !== process.env.ADMIN_EMAIL || password !== process.env.ADMIN_PASSWORD){
+            return res.status(400).json({ sucess:false, message: "Invalid credentials" });
+        }
+        else{
+            const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+                expiresIn: "3d",
+            });
+            return res.status(200).json({ sucess:true, token });
+        }
+    } catch (error) {
+        
+    }
 }
 
 export {loginUser, registerUser, adminLogin}
