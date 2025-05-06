@@ -4,7 +4,7 @@ import Title from '../components/Title';
 import ProductItem from '../components/ProductItem';
 
 const Collection = () => {
-  const { products } = useContext(ShopContext);
+  const { products , search , showSearch} = useContext(ShopContext);
   const [showFilters, setShowFilters] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState([]);
@@ -28,6 +28,12 @@ const Collection = () => {
   useEffect(() => {
     let filtered = [...products];
 
+    if(showSearch && search) {
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
     if (category.length > 0) {
       filtered = filtered.filter((item) => category.includes(item.category));
     }
@@ -43,7 +49,7 @@ const Collection = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [products, category, subCategory, sortOption]);
+  }, [products, category, subCategory, sortOption , search, showSearch]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
