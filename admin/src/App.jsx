@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import { Routes, Route } from "react-router-dom";
@@ -7,13 +7,26 @@ import List from "./pages/List";
 import Orders from "./pages/Orders";
 import { useState } from "react";
 import Login from "./pages/Login";
+import { ToastContainer, toast } from 'react-toastify';
+
+export const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 const App = () => {
-  const [token, setToken] = useState("srfsd");
+  const [token, setToken] = useState("12");
+  // const [token, setToken] = useState(localStorage.getItem('token') 
+  // ? localStorage.getItem('token') 
+  // : '');
+
+  useEffect(
+    () =>{
+      localStorage.setItem('token',token)
+    } , [token]
+  )
   return (
     <div className="bg-gray-50 min-h-screen">
+      <ToastContainer />
       {token === "" ? (
-        <Login />
+        <Login setToken = {setToken} />
       ) : (
         <>
           <Navbar />
@@ -28,7 +41,7 @@ const App = () => {
             </div>
           </div>
         </>
-      )}
+      )} 
     </div>
   );
 };
