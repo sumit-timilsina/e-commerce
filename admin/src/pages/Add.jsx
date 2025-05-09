@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { assets } from "../assets/assets";
+import axios from "axios";
+import { backendUrl } from "../App";
 
 const Add = () => {
   const [images, setImages] = useState([null, null, null, null]);
@@ -24,8 +26,35 @@ const Add = () => {
     );
   };
 
+
+  const onSubmitHandler = async(e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("category", category);
+      formData.append("subcategory", subcategory);
+      formData.append("price", price);
+      formData.append("sizes", JSON.stringify(sizes));
+      formData.append("bestseller", bestseller);
+      images.forEach((image, index) => {
+        if (image) {
+          formData.append(`image${index + 1}`, image);
+        }
+      });
+      const response = await axios.post(backendUrl+"/api/product/add",formData)
+
+      console.log(response.data);
+    } catch (error) {
+      
+    }
+    };
+
   return (
-    <form className="w-full max-w-6xl mx-auto p-6 md:p-10 bg-white shadow-xl rounded-2xl space-y-8">
+    <form 
+    onSubmit={onSubmitHandler()}
+    className="w-full max-w-6xl mx-auto p-6 md:p-10 bg-white shadow-xl rounded-2xl space-y-8">
       <h2 className="text-3xl font-bold text-gray-900">Add New Product</h2>
 
       {/* Upload Section */}
