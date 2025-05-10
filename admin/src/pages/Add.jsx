@@ -16,7 +16,7 @@ const Add = ({token}) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [subcategory, setSubcategory] = useState("");
+  const [subCategory, setSubCategory] = useState("");
   const [price, setPrice] = useState("");
   const [sizes, setSizes] = useState([]);
   const [bestseller, setBestseller] = useState(false);
@@ -28,31 +28,36 @@ const Add = ({token}) => {
   };
 
 
-  const onSubmitHandler = async(e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
       formData.append("category", category);
-      formData.append("subCategory", subCategory);
+      formData.append("subCategory", subCategory);  
       formData.append("price", price);
       formData.append("sizes", JSON.stringify(sizes));
       formData.append("bestseller", bestseller);
+      
       images.forEach((image, index) => {
         if (image) {
           formData.append(`image${index + 1}`, image);
         }
       });
-      const response = await axios.post(backendUrl + "/api/product/add",formData,{headers:{token}})
-
+  
+      const response = await axios.post(backendUrl + "/api/product/add", formData, {
+        headers: { token }
+      });
+  
       console.log(response.data);
+  
       if (response.data.success) {
         toast.success("Product added successfully");
         setName("");
         setDescription("");
         setCategory("");
-        setSubcategory("");
+        setSubCategory("");  // Reset subCategory to an empty string
         setPrice("");
         setSizes([]);
         setBestseller(false);
@@ -60,14 +65,10 @@ const Add = ({token}) => {
       }
     } catch (error) {
       console.log("submit error", error);
-      if (error.response) {
-        console.log("Backend error response:", error.response.data);
-        toast.error(error.response.data.message || "Error from server");
-      } else {
-        toast.error("Network error");
-      }
+      alert("Error adding product");
     }
-    };
+  };
+  
 
   return (
     <form 
@@ -160,7 +161,7 @@ const Add = ({token}) => {
             Sub Category
           </label>
           <select
-            onChange={(e) => setSubcategory(e.target.value)}
+            onChange={(e) => setSubCategory(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none"
           >
             <option value="">Select</option>

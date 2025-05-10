@@ -53,8 +53,8 @@ const addProduct = async (req, res) => {
 
     res.json({sucess:true, message: "Product added successfully" });
   } catch (err) {
-    console.log(err);
-    res.json({ success: false, message: err.message });
+    console.log("Validation Error:", err.errors);
+  res.status(400).json({ success: false, message: err.message, details: err.errors });
   }
 };
 
