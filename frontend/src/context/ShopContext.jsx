@@ -1,10 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import { products } from "../assets/frontend_assets/assets";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const currency = "$";
   const delivery_fee = "10";
   const [search, setSearch] = useState("");
@@ -77,6 +79,20 @@ const ShopContextProvider = (props) => {
     }
     return totalAmount;
   };
+  const getProductsData = async () => {
+    try {
+      const response = await axios.get(backendUrl + "/api/products/list");
+      // setProducts(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    getProductsData();
+  }, []);
+
 
   const value = {
     products,
