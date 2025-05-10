@@ -8,7 +8,7 @@ const Navbar = () => {
 
     const [visible, setVisible] = useState(false);
 
-    const {setShowSearch , getCartCount} = useContext(ShopContext);
+    const {setShowSearch , getCartCount , navigate} = useContext(ShopContext);
 
     return (
         <div className='flex justify-between items-center py-5 font-medium '>
@@ -52,11 +52,15 @@ const Navbar = () => {
             </ul>
             <div className='flex items-center gap-6'>
                 <img 
-                onClick={() => setShowSearch(true)}
+                onClick={() => {
+                    navigate('./collection')
+                    setShowSearch(true)}}
                 src={assets.search_icon} alt="search-icon" className='w-5 cursor-pointer' />
 
                 <div className='group relative'>
+                    <Link to='./login'>
                     <img src={assets.profile_icon} alt="cart-icon" className='w-5 cursor-pointer' />
+                    </Link>
                     <div className='hidden group-hover:block absolute pt-4 dropdown-menu right-0 '>
                         <div className='flex flex-col gap-2 px-5 py-3 w-36 bg-slate-100 text-gray-700'>
                             <p className='cursor-pointer hover:text-black'>My Profile</p>

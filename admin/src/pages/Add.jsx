@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
+import { toast } from "react-toastify";
 
-const Add = () => {
+const Add = ({token}) => {
   const [images, setImages] = useState([null, null, null, null]);
 
   const handleImageChange = (index, file) => {
@@ -43,17 +44,29 @@ const Add = () => {
           formData.append(`image${index + 1}`, image);
         }
       });
-      const response = await axios.post(backendUrl+"/api/product/add",formData)
+      const response = await axios.post(backendUrl + "/api/product/add",formData,{headers:{token}})
 
       console.log(response.data);
+      if (response.data.success) {
+        toast.success("Product added successfully");
+        setName("");
+        setDescription("");
+        setCategory("");
+        setSubcategory("");
+        setPrice("");
+        setSizes([]);
+        setBestseller(false);
+        setImages([null, null, null, null]);
+      }
     } catch (error) {
-      
+      console.log("submit error", error);
+      alert("Error adding product");
     }
     };
 
   return (
     <form 
-    onSubmit={onSubmitHandler()}
+    onSubmit={onSubmitHandler}
     className="w-full max-w-6xl mx-auto p-6 md:p-10 bg-white shadow-xl rounded-2xl space-y-8">
       <h2 className="text-3xl font-bold text-gray-900">Add New Product</h2>
 
