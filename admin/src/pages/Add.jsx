@@ -35,7 +35,7 @@ const Add = ({token}) => {
       formData.append("name", name);
       formData.append("description", description);
       formData.append("category", category);
-      formData.append("subcategory", subcategory);
+      formData.append("subCategory", subCategory);
       formData.append("price", price);
       formData.append("sizes", JSON.stringify(sizes));
       formData.append("bestseller", bestseller);
@@ -60,7 +60,12 @@ const Add = ({token}) => {
       }
     } catch (error) {
       console.log("submit error", error);
-      alert("Error adding product");
+      if (error.response) {
+        console.log("Backend error response:", error.response.data);
+        toast.error(error.response.data.message || "Error from server");
+      } else {
+        toast.error("Network error");
+      }
     }
     };
 
