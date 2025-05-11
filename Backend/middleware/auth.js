@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const authUser = (req, res, next) => {
     const token = req.headers;
 
-    if (!token) {
+    if (!token || typeof token !== "string") {
         return res.status(401).json({ message: "Unauthorized, no token" });
     }
 
