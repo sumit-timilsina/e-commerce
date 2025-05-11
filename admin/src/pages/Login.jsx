@@ -8,20 +8,25 @@ const Login = ({ setToken }) => {
   const [password, setPassword] = React.useState("");
 
   const onSubmitHandler = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-      const response = await axios.post(backendUrl + "/api/user/admin/login", { email, password });
-
-      if (response.data.sucess) {
+      const response = await axios.post(`${backendUrl}/api/user/admin/login`, {
+        email,
+        password,
+      });
+  
+      if (response.data.success) {
         setToken(response.data.token);
+        toast.success("Login successful! 🔐");
       } else {
-        console.log("error")
-        toast.error(response.data.message)
+        toast.error(response.data.message || "Login failed.");
       }
     } catch (error) {
-      toast.error(error.message)
+      console.error("Login error:", error); // Log for debugging
+      toast.error(error.response?.data?.message || error.message || "Something went wrong.");
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
