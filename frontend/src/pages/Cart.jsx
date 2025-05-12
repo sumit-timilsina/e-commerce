@@ -5,7 +5,7 @@ import { assets } from "../assets/frontend_assets/assets";
 import CartTotal from "../components/CartTotal";
 
 const Cart = () => {
-  const { products, currency, cartItems, updateQUantity, navigate } =
+  const { products, currency, cartItems, updateQuantity, navigate } =
     useContext(ShopContext);
   const [cartData, setCartData] = useState([]);
 
@@ -68,7 +68,7 @@ const Cart = () => {
                   onChange={(e) =>
                     e.target.value === "" || e.target.value === "0"
                       ? null
-                      : updateQUantity(
+                      : updateQuantity(
                           item._id,
                           item.size,
                           Number(e.target.value)
