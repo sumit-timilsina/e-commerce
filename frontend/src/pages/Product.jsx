@@ -15,7 +15,7 @@ const Product = () => {
     products.map((item) => {
       if (item._id === productId) {
         setProductData(item)
-        setImage(item.image[0])
+        setImage(item.images[0])
         return null;
       }
     })
@@ -32,7 +32,7 @@ const Product = () => {
         {/* Image Gallery */}
         <div className="flex-1">
           <div className="flex gap-2 overflow-x-auto mb-4">
-            {productData.image.map((item, index) => (
+            {productData.images.map((item, index) => (
               <img
                 onClick={() => setImage(item)}
                 src={item}

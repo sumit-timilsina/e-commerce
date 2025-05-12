@@ -44,7 +44,7 @@ const Cart = () => {
               className="flex flex-col md:flex-row items-center gap-4 p-4 border rounded-xl shadow-sm hover:shadow-md transition duration-300"
             >
               <img
-                src={productData.image[0]}
+                src={productData.images[0]}
                 alt={productData.name}
                 className="w-24 h-24 object-cover rounded-md"
               />
