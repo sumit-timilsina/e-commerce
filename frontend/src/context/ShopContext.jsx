@@ -115,8 +115,17 @@ const ShopContextProvider = (props) => {
 
  const getProductsData = async () => {
   try {
-   ssss
+    const response = await axios.get(backendUrl + "/api/product/list");
+
+    if(response.data.success){
+      setProducts(response.data.products);
+    }
+    else{
+      toast.error(response.data.message);
+    }
   } catch (error) {
+    console.error("Error fetching products:", error);
+    toast.error(error.message);
     
   }
  }

@@ -1,3 +1,5 @@
 amin panel frontend : 7:24:47
 
 s : 10 :23: 22
+
+remove admin auth from product/list

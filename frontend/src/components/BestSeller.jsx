@@ -12,7 +12,7 @@ const BestSeller = () => {
     useEffect(() =>{
         const bestProduct = products.filter((item) => item.bestseller === true);
         setBestSeller(bestProduct.slice(0,5));
-    },[])
+    },[products])
 
   return (          
     <div className='my-10'>
@@ -29,7 +29,7 @@ const BestSeller = () => {
                key={index}
                id={item._id}
                name={item.name}
-               image={item.image}
+               image={item.images[0]}
                price={item.price}
                />
             ))}

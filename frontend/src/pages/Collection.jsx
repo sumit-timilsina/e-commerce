@@ -27,7 +27,7 @@ const Collection = () => {
 
   useEffect(() => {
     let filtered = [...products];
-
+   
     if(showSearch && search) {
       filtered = filtered.filter((item) =>
         item.name.toLowerCase().includes(search.toLowerCase())
@@ -47,7 +47,7 @@ const Collection = () => {
     } else if (sortOption === 'price-desc') {
       filtered.sort((a, b) => b.price - a.price);
     }
-
+    console.log('Filtered Products:', filtered);
     setFilteredProducts(filtered);
   }, [products, category, subCategory, sortOption , search, showSearch]);
 
@@ -126,7 +126,7 @@ const Collection = () => {
                   name={item.name}
                   id={item._id}
                   price={item.price}
-                  image={item.image}
+                  image={item.images[0]}
                 />
               ))
             ) : (
