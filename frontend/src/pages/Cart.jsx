@@ -10,7 +10,7 @@ const Cart = () => {
   const [cartData, setCartData] = useState([]);
 
   useEffect(() => {
-    if (products.length > 0) {
+   
       const tempData = [];
       for (const items in cartItems) {
         for (const item in cartItems[items]) {
@@ -22,10 +22,10 @@ const Cart = () => {
             });
           }
         }
-      }
+      
     }
     setCartData(tempData);
-  }, [cartItems, products]);
+  }, [cartItems]);
 
   return (
     <div className="px-4 md:px-10 lg:px-20 py-10">
