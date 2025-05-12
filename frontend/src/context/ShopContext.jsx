@@ -42,7 +42,6 @@ const ShopContextProvider = (props) => {
    
 
     if (token) {
-      console.log(typeof token);
       try {
         await axios.post(
           "http://localhost:3000" + "/api/cart/add",
@@ -131,14 +130,29 @@ const ShopContextProvider = (props) => {
   }
  }
 
+ const getCartData = async (token) => {
+  try {
+    const response = await axios.get(backendUrl + "/api/cart/get", {
+      headers: {
+        Authorization: token,
+      },
+    });
+    setCartItems(response.data.cartData)
+  } catch (error) {
+    console.error("Error fetching cart data:", error);
+    toast.error(error.message);
+  }
+ };
+
  useEffect(() => {
     getProductsData();
+
  }, []);
 
  useEffect(() => {
   if(!token && localStorage.getItem("token")){
     setToken(localStorage.getItem("token"));  
-
+    getCartData(localStorage.getItem("token"));
   }
 }, []);
 

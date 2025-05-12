@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 
 const authUser = (req, res, next) => {
     const token = req.headers.authorization;
- 
 
     if (!token) {
         return res.status(401).json({ message: "Unauthorized, no token" });
@@ -10,6 +9,7 @@ const authUser = (req, res, next) => {
 
     try {
         const token_decode = jwt.verify(token, process.env.JWT_SECRET);
+        req.body = {};
         req.body.userId = token_decode.id;
 
         next();
