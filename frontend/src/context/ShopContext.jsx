@@ -5,7 +5,7 @@ import axios from "axios";
 
 export const ShopContext = createContext();
 
-let token = localStorage.getItem("token");
+// let token = localStorage.getItem("token");
 
 const ShopContextProvider = (props) => {
   const currency = "$";
@@ -16,6 +16,7 @@ const ShopContextProvider = (props) => {
   const [showSearch, setShowSearch] = useState(false);
   const [cartItems, setCartItems] = useState({});
   const [products, setProducts] = useState([]);
+  const [token, setToken] = useState("");
 
   const navigate = useNavigate();
 
@@ -134,6 +135,14 @@ const ShopContextProvider = (props) => {
     getProductsData();
  }, []);
 
+ useEffect(() => {
+  if(!token && localStorage.getItem("token")){
+    setToken(localStorage.getItem("token"));  
+
+  }
+}, []);
+
+
   const value = {
     products,
     currency,
@@ -149,6 +158,8 @@ const ShopContextProvider = (props) => {
     getCartAmount,
     navigate,
     backendUrl,
+    setToken,
+    token,
   };
   return (
     <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>

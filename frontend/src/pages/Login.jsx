@@ -1,52 +1,49 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useContext, useState } from "react";
+import axios from "axios";
 import { toast } from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import { ShopContext } from "../context/ShopContext";
 
 const Login = () => {
-  const [currentState, setCurrentState] = useState('sign-up')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [message, setMessage] = useState('')
+  const [currentState, setCurrentState] = useState("signup");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  let navigate = useNavigate()
+  const { setToken, backendUrl, navigate } = useContext(ShopContext);
 
   const onSubmitHandler = async (e) => {
-    e.preventDefault()
-
-    const url =
-      currentState === 'Login'
-        ? 'http://localhost:3000/api/user/login'
-        : 'http://localhost:3000/api/user/register'
-
-    const data =
-      currentState === 'Login'
-        ? { email, password }
-        : { name, email, password }
-
+    e.preventDefault();
+    setLoading(true);
     try {
-      const response = await axios.post(url, data)
-      toast.success(`${currentState === 'Login' ? 'Logged in' : 'Registered'} successfully! ✅`)
-      //navigate to homepage after successful login
-      if (currentState === 'Login') {
-        navigate('/')
-      }
-
-      console.log('User:', response.data.user)
-      console.log('Token:', response.data.token)
-
-      // Optional: Save the token
-      localStorage.setItem('token', response.data.token)
-
-    } catch (error) {
-      if (error.response) {
-        toast.error(error.response.data.message)
+      let response;
+      if (currentState === "signup") {
+        response = await axios.post(`${backendUrl}/api/user/register`, {
+          name,
+          email,
+          password,
+        });
       } else {
-        toast.error('An error occurred. Please try again.')
+        response = await axios.post(`${backendUrl}/api/user/login`, {
+          email,
+          password,
+        });
       }
+
+      if (response.data.token) {
+        toast.success(`${currentState === "signup" ? "Registered" : "Logged in"} successfully!`);
+        setToken(response.data.token);
+        localStorage.setItem("token", response.data.token);
+        navigate("/"); // redirect to homepage or dashboard
+      } else {
+        toast.error("Something went wrong.");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error occurred");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -55,18 +52,19 @@ const Login = () => {
         className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md"
       >
         <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-gray-800 capitalize">{currentState}</h2>
-          <hr className="mt-2 border-gray-300" />
+          <h2 className="text-2xl font-bold text-gray-800 capitalize">
+            {currentState === "login" ? "Login" : "Sign Up"}
+          </h2>
         </div>
 
-        {currentState !== 'Login' && (
+        {currentState === "signup" && (
           <input
             type="text"
             placeholder="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md"
           />
         )}
         <input
@@ -75,7 +73,7 @@ const Login = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md"
         />
         <input
           type="password"
@@ -83,27 +81,17 @@ const Login = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-md"
         />
 
-        {message && (
-          <p className="text-sm text-center text-red-500 mb-4">{message}</p>
-        )}
-
         <div className="flex items-center justify-between text-sm text-gray-600 mb-6">
-          <p className="cursor-pointer hover:underline">Forgot your password?</p>
-          {currentState === 'Login' ? (
-            <p
-              onClick={() => setCurrentState('sign-up')}
-              className="cursor-pointer text-blue-600 hover:underline"
-            >
+          <p className="cursor-pointer hover:underline">Forgot password?</p>
+          {currentState === "login" ? (
+            <p onClick={() => setCurrentState("signup")} className="text-blue-600 cursor-pointer hover:underline">
               Create account
             </p>
           ) : (
-            <p
-              onClick={() => setCurrentState('Login')}
-              className="cursor-pointer text-blue-600 hover:underline"
-            >
+            <p onClick={() => setCurrentState("login")} className="text-blue-600 cursor-pointer hover:underline">
               Login Here
             </p>
           )}
@@ -111,13 +99,16 @@ const Login = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          disabled={loading}
+          className={`w-full bg-blue-600 text-white py-2 rounded-md transition ${
+            loading ? "opacity-60 cursor-not-allowed" : "hover:bg-blue-700"
+          }`}
         >
-          {currentState === 'Login' ? 'Sign In' : 'Sign Up'}
+          {loading ? "Loading..." : currentState === "login" ? "Sign In" : "Sign Up"}
         </button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

@@ -19,8 +19,11 @@ const Product = () => {
         return null;
       }
     })
+
+
   }
 
+  console.log(productData);
   useEffect(() => {
     fetchProductData();
   }, [productId]);
@@ -64,7 +67,8 @@ const Product = () => {
           <div className="mt-4">
             <p className="font-medium mb-2">Select Size</p>
             <div className="flex gap-2 flex-wrap">
-              {productData.sizes.map((item, index) => (
+              {
+              productData.sizes.map((item, index) => (
                 <button
                   key={index}
                   onClick={() => setSize(item)}
