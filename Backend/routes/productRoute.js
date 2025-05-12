@@ -22,7 +22,7 @@ productRouter.post(
   addProduct
 );
 
-productRouter.get("/list",adminAuth,auth, listProducts);
+productRouter.get("/list",adminAuth, listProducts);
 productRouter.get("/single", singleProduct);
 productRouter.delete("/remove", removeProduct);
 

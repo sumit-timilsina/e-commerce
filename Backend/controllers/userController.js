@@ -91,6 +91,7 @@ const adminLogin = async (req, res) => {
             const token = jwt.sign({ email }, process.env.JWT_SECRET, {
                 expiresIn: "3d",
             });
+            console.log(token)
             return res.status(200).json({ success: true, token });
         }
     } catch (error) {
