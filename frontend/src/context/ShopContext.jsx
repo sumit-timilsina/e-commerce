@@ -51,6 +51,8 @@ const ShopContextProvider = (props) => {
             },
           }
         );
+
+        console.log(itemId, size);
       } catch (error) {
         console.log(error);
         toast.error(error.message);
