@@ -3,6 +3,8 @@ import Title from "../components/Title";
 import CartTotal from "../components/CartTotal";
 import { assets } from "../assets/frontend_assets/assets";
 import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
@@ -65,7 +67,6 @@ const PlaceOrder = () => {
       switch (method) {
         
         case "cod":
-         
           const response = await axios.post(
             backendUrl + "/api/order/place",
             orderData,
@@ -80,13 +81,15 @@ const PlaceOrder = () => {
           else{
             toast.error(response.data.message || "Order Failed");
           }
-
           break;
 
         default:
           break;
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error placing order:", error);
+      toast.error(error.message || "Order Failed");
+    }
   };
 
   return (

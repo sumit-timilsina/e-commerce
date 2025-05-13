@@ -61,6 +61,24 @@ const allOrders = async (req, res) => {
 //user order for frontend
 const userOrders = async (req, res) => {
 
+    try{
+        const { userId } = req.body;
+        const orders = await orderModel.find({ userId }).sort({ date: -1 });
+        
+    
+        res.json({
+            success: true,
+            orders,
+        })
+    }
+    catch (error) {
+        res.json({
+            success: false,
+            message: "Failed to fetch orders",
+            error: error.message,
+        });
+    }
+
 }
 
 //update order status
