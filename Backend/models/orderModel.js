@@ -14,12 +14,12 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   address: {
-    type: String,
+    type: Object,
     required: true,
   },
   status: {
     type: String,
-    default: "pending",
+    required: true,
     default: "Order Placed",
   },
   paymentMethod: {

@@ -19,7 +19,7 @@ const Orders = () => {
           >
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <img
-                src={item.image[0]}
+                src={item.images[0]}
                 alt={item.name}
                 className="w-24 h-24 object-cover rounded-lg"
               />
