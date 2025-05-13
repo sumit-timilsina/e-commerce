@@ -55,7 +55,15 @@ const placeOrderRazorpar = async (req, res) => {
 
 //all orders for admin
 const allOrders = async (req, res) => {
-
+    try {
+        const orders = await orderModel.find({}).sort({ date: -1 });
+        res.json({
+            success: true,
+            orders,
+        })
+    } catch (error) {
+        
+    }
 }
 
 //user order for frontend
@@ -83,7 +91,28 @@ const userOrders = async (req, res) => {
 
 //update order status
 const updateStatus = async (req, res) => {
-
+    try {
+        const { orderId, status } = req.body;
+        const order = await orderModel.findById(orderId);
+        if (!order) {
+            return res.json({
+                success: false,
+                message: "Order not found",
+            });
+        }
+        order.status = status;
+        await order.save();
+        res.json({
+            success: true,
+            message: "Order status updated successfully",
+        });
+    } catch (error) {
+        res.json({
+            success: false,
+            message: "Failed to update order status",
+            error: error.message,
+        });
+}
 }
 
 
