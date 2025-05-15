@@ -15,6 +15,7 @@ import Product from './pages/Product'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import SearchBar from './components/SearchBar'
+import Verify from './pages/Verify';
 
 
 const App = () => {
@@ -34,7 +35,9 @@ const App = () => {
         <Route path='/orders' element={<Orders/>} />
         <Route path='/login' element={<Login/>} />
         <Route path='/place-order' element={<PlaceOrder/>} />
-        <Route path='/product/:productId' element={<Product/>} />      
+        <Route path='/product/:productId' element={<Product/>} />     
+        <Route path='/verify' element={<Verify/>} />
+
       </Routes>
       <Footer/>
     </div>

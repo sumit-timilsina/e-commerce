@@ -83,6 +83,23 @@ const PlaceOrder = () => {
           }
           break;
 
+        case "stripe":
+          const responseStripe = await axios.post(
+            backendUrl + "/api/order/stripe",
+            orderData,
+            { headers: { Authorization: token } }
+          )
+
+          if(responseStripe.data.success){
+            const {session_url} = responseStripe.data;
+            window.location.replace(session_url);
+          }
+          else{
+            toast.error(responseStripe.data.message || "Order Failed");
+          }
+        break;
+        
+
         default:
           break;
       }
@@ -312,7 +329,7 @@ const PlaceOrder = () => {
                     />
                   </div>
 
-                  <div
+                  {/* <div
                     onClick={() => setMethod("razorpay")}
                     className={`relative flex items-center justify-center p-3 border rounded-md hover:shadow cursor-pointer ${
                       method === "razorpay"
@@ -328,7 +345,7 @@ const PlaceOrder = () => {
                       alt="Razorpay"
                       className="w-auto max-h-8 object-contain"
                     />
-                  </div>
+                  </div> */}
 
                   <div
                     onClick={() => setMethod("cod")}
