@@ -43,7 +43,7 @@ const ShopContextProvider = (props) => {
     if (token) {
       try {
         await axios.post(
-          "http://localhost:3000" + "/api/cart/add",
+          backendUrl + "/api/cart/add",
           { itemId, size },
           {
             headers: {
