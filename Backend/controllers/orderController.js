@@ -1,5 +1,12 @@
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
+
+import Stripe from "stripe"
+
+
+//gateway initilization
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 //cash on deliver
 
 const placeOrder = async (req, res) => {
@@ -37,7 +44,25 @@ const placeOrder = async (req, res) => {
 //Using stripe
 const placeOrderStripe = async (req, res) => {
     try {
-        
+        const { userId, items,amount,address} = req.body;
+        const {origin} = req.headers;
+
+        const orderData = {
+            userId,
+            items,
+            amount,
+            address,
+            status: "Order Placed",
+            paymentMethod: "Stripe",
+            payment: false,
+            date: Date.now(),
+        };
+
+        const newOrder = new orderModel(orderData);
+        await newOrder.save();
+
+        // const line_items = items.map((item)=>)
+
     } catch (error) {
         
     }
