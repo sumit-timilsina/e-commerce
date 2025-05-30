@@ -3,11 +3,18 @@ import { assets1 } from "../assets/admin_assets/assets1";
 import { assets } from "../assets/frontend_assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = useContext(ShopContext);
+  const {
+    setShowSearch,
+    getCartCount,
+    navigate,
+    token,
+    setToken,
+    setCartItems,
+  } = useContext(ShopContext);
 
   const Logout = () => {
     setToken("");
@@ -26,27 +33,24 @@ const Navbar = () => {
           alt="Nexus Logo"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         />
       </Link>
 
       {/* Desktop Menu */}
       <ul className="hidden sm:flex gap-6 text-sm sm:text-base text-gray-600">
-        {['/', '/collection', '/about', '/contact'].map((path, index) => (
+        {["/", "/collection", "/about", "/contact"].map((path, index) => (
           <NavLink
             key={index}
             to={path}
             className={({ isActive }) =>
               `flex flex-col items-center font-semibold transition-colors duration-300 ${
-                isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                isActive ? "text-gray-900" : "text-gray-600 hover:text-gray-900"
               }`
             }
           >
-            <motion.p
-              whileHover={{ y: -2 }}
-              transition={{ duration: 0.3 }}
-            >
-              {path === '/' ? 'HOME' : path.replace('/', '').toUpperCase()}
+            <motion.p whileHover={{ y: -2 }} transition={{ duration: 0.3 }}>
+              {path === "/" ? "HOME" : path.replace("/", "").toUpperCase()}
             </motion.p>
           </NavLink>
         ))}
@@ -56,7 +60,7 @@ const Navbar = () => {
       <div className="flex items-center gap-4 sm:gap-6">
         <motion.img
           onClick={() => {
-            navigate('/collection');
+            navigate("/collection");
             setShowSearch(true);
           }}
           src={assets.search_icon}
@@ -83,11 +87,19 @@ const Navbar = () => {
                 transition={{ duration: 0.3 }}
               >
                 <div className="flex flex-col gap-2 px-5 py-3 w-36 bg-white border border-gray-100 rounded-lg shadow-sm text-gray-600 text-sm font-sans">
-                  <button className="text-left hover:text-gray-900 transition-colors">My Profile</button>
-                  <button onClick={() => navigate('/orders')} className="text-left hover:text-gray-900 transition-colors">
+                  <button className="text-left hover:text-gray-900 transition-colors">
+                    My Profile
+                  </button>
+                  <button
+                    onClick={() => navigate("/orders")}
+                    className="text-left hover:text-gray-900 transition-colors"
+                  >
                     Orders
                   </button>
-                  <button onClick={Logout} className="text-left hover:text-gray-900 transition-colors">
+                  <button
+                    onClick={Logout}
+                    className="text-left hover:text-gray-900 transition-colors"
+                  >
                     Logout
                   </button>
                 </div>
@@ -132,12 +144,14 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <motion.div
-        className={`sm:hidden fixed top-0 right-0 bottom-0 bg-white z-20 transition-all duration-300 ${
-          visible ? 'w-full' : 'w-0'
+        className={`sm:hidden fixed top-0 right-0 bottom-0 bg-white z-20 overflow-hidden transition-all duration-300 ease-in-out ${
+          visible
+            ? "w-full pointer-events-auto opacity-100"
+            : "w-0 pointer-events-none opacity-0"
         }`}
-        initial={{ x: '100%' }}
-        animate={{ x: visible ? 0 : '100%' }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
+        initial={{ x: "100%" }}
+        animate={{ x: visible ? 0 : "100%" }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
         aria-hidden={!visible}
       >
         <div className="flex flex-col h-full text-gray-600">
@@ -147,27 +161,30 @@ const Navbar = () => {
             whileHover={{ x: -5 }}
             transition={{ duration: 0.3 }}
           >
-            <img className="h-5 rotate-180" src={assets.dropdown_icon} alt="Close Menu" />
+            <img
+              className="h-5 rotate-180"
+              src={assets.dropdown_icon}
+              alt="Close Menu"
+            />
             <p className="text-sm font-semibold font-sans">Back</p>
           </motion.div>
 
           <div className="flex flex-col justify-start items-center py-8 space-y-6">
-            {['/', '/collection', '/about', '/contact'].map((path, index) => (
+            {["/", "/collection", "/about", "/contact"].map((path, index) => (
               <NavLink
                 key={index}
                 onClick={() => setVisible(false)}
                 to={path}
                 className={({ isActive }) =>
                   `w-full flex flex-col items-center py-3 text-sm font-semibold font-sans transition-colors duration-300 ${
-                    isActive ? 'text-gray-900' : 'text-gray-600 hover:text-gray-900'
+                    isActive
+                      ? "text-gray-900"
+                      : "text-gray-600 hover:text-gray-900"
                   }`
                 }
               >
-                <motion.p
-                  whileHover={{ x: 5 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {path === '/' ? 'HOME' : path.replace('/', '').toUpperCase()}
+                <motion.p whileHover={{ x: 5 }} transition={{ duration: 0.3 }}>
+                  {path === "/" ? "HOME" : path.replace("/", "").toUpperCase()}
                 </motion.p>
               </NavLink>
             ))}

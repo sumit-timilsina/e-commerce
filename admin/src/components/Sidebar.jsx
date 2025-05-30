@@ -12,7 +12,7 @@ const Sidebar = () => {
 
   return (
     <motion.aside
-      className="w-64 bg-white border-r h-screen border-gray-100 shadow-sm  p-6 flex flex-col gap-4"
+      className="w-16 sm:w-64 bg-white border-r h-screen border-gray-100 shadow-sm p-2 sm:p-6 flex flex-col items-center sm:items-start gap-4"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -22,7 +22,7 @@ const Sidebar = () => {
           key={idx}
           to={item.to}
           className={({ isActive }) =>
-            `flex items-center gap-3 p-3 rounded-md transition-all font-sans text-sm sm:text-base ${
+            `flex flex-col sm:flex-row items-center gap-1 sm:gap-3 w-full sm:w-auto p-2 sm:p-3 rounded-md transition-all font-sans text-xs sm:text-base ${
               isActive
                 ? 'bg-gray-100 text-gray-900 font-semibold shadow-sm'
                 : 'text-gray-600 hover:bg-gray-100 hover:shadow-sm'
@@ -33,11 +33,11 @@ const Sidebar = () => {
           <motion.img
             src={item.icon}
             alt={item.alt}
-            className="h-5 w-5 sm:h-6 sm:w-6"
+            className="h-6 w-6 sm:h-6 sm:w-6"
             whileHover={{ scale: 1.1 }}
             transition={{ duration: 0.2 }}
           />
-          <p>{item.label}</p>
+          <span className="hidden sm:inline">{item.label}</span>
         </NavLink>
       ))}
     </motion.aside>

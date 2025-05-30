@@ -66,24 +66,24 @@ const Add = ({ token }) => {
   };
 
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section className="py-6 px-3 sm:px-6 lg:px-8 max-w-7xl mx-auto min-h-screen flex items-center justify-center">
       <motion.form
         onSubmit={onSubmitHandler}
-        className="w-full bg-white shadow-sm rounded-xl p-6 sm:p-8 space-y-6"
+        className="w-full bg-white shadow-sm rounded-xl p-4 sm:p-6 md:p-8 space-y-5"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-sans">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 font-sans text-center">
           Add New Product
         </h2>
 
         {/* Upload Section */}
         <div>
-          <p className="text-sm sm:text-base font-semibold text-gray-900 font-sans mb-2">
+          <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 font-sans mb-2">
             Upload Images
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-4 sm:gap-4">
             {[1, 2, 3, 4].map((num, index) => (
               <label
                 htmlFor={`image${num}`}
@@ -98,7 +98,7 @@ const Add = ({ token }) => {
                       : assets.upload_area
                   }
                   alt={`Product image ${num} upload placeholder`}
-                  className="w-full h-32 object-cover rounded-md"
+                  className="w-full h-24 sm:h-32 object-cover rounded-md"
                 />
                 <input
                   type="file"
@@ -119,7 +119,7 @@ const Add = ({ token }) => {
         <div>
           <label
             htmlFor="name"
-            className="block text-sm sm:text-base font-medium text-gray-900 font-sans mb-2"
+            className="block text-xs sm:text-sm md:text-base font-medium text-gray-900 font-sans mb-1 sm:mb-2"
           >
             Product Name
           </label>
@@ -127,7 +127,7 @@ const Add = ({ token }) => {
             id="name"
             onChange={(e) => setName(e.target.value)}
             value={name}
-            className="w-full max-w-md px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-xs sm:text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
             type="text"
             placeholder="Enter product name"
             required
@@ -139,7 +139,7 @@ const Add = ({ token }) => {
         <div>
           <label
             htmlFor="description"
-            className="block text-sm sm:text-base font-medium text-gray-900 font-sans mb-2"
+            className="block text-xs sm:text-sm md:text-base font-medium text-gray-900 font-sans mb-1 sm:mb-2"
           >
             Product Description
           </label>
@@ -147,8 +147,8 @@ const Add = ({ token }) => {
             id="description"
             onChange={(e) => setDescription(e.target.value)}
             value={description}
-            className="w-full max-w-2xl px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300 resize-none"
-            rows={4}
+            className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-xs sm:text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gray-300 resize-none"
+            rows={3} // Reduced for smaller screens
             placeholder="Enter product description"
             required
             aria-label="Product description"
@@ -156,11 +156,11 @@ const Add = ({ token }) => {
         </div>
 
         {/* Category Section */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-6">
           <div>
             <label
               htmlFor="category"
-              className="block text-sm sm:text-base font-medium text-gray-900 font-sans mb-2"
+              className="block text-xs sm:text-sm md:text-base font-medium text-gray-900 font-sans mb-1 sm:mb-2"
             >
               Product Category
             </label>
@@ -168,7 +168,7 @@ const Add = ({ token }) => {
               id="category"
               onChange={(e) => setCategory(e.target.value)}
               value={category}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-xs sm:text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
               aria-label="Select product category"
             >
               <option value="">Select Category</option>
@@ -181,7 +181,7 @@ const Add = ({ token }) => {
           <div>
             <label
               htmlFor="subCategory"
-              className="block text-sm sm:text-base font-medium text-gray-900 font-sans mb-2"
+              className="block text-xs sm:text-sm md:text-base font-medium text-gray-900 font-sans mb-1 sm:mb-2"
             >
               Sub Category
             </label>
@@ -189,7 +189,7 @@ const Add = ({ token }) => {
               id="subCategory"
               onChange={(e) => setSubCategory(e.target.value)}
               value={subCategory}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-xs sm:text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
               aria-label="Select product sub-category"
             >
               <option value="">Select Sub-Category</option>
@@ -202,7 +202,7 @@ const Add = ({ token }) => {
           <div>
             <label
               htmlFor="price"
-              className="block text-sm sm:text-base font-medium text-gray-900 font-sans mb-2"
+              className="block text-xs sm:text-sm md:text-base font-medium text-gray-900 font-sans mb-1 sm:mb-2"
             >
               Product Price ($)
             </label>
@@ -214,7 +214,7 @@ const Add = ({ token }) => {
               min="0"
               step="0.01"
               placeholder="25.00"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+              className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-xs sm:text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
               aria-label="Product price"
             />
           </div>
@@ -222,16 +222,16 @@ const Add = ({ token }) => {
 
         {/* Sizes */}
         <div>
-          <p className="text-sm sm:text-base font-semibold text-gray-900 font-sans mb-2">
+          <p className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 font-sans mb-1 sm:mb-2">
             Product Sizes
           </p>
-          <div className="flex gap-3 flex-wrap">
+          <div className="flex gap-2 sm:gap-3 flex-wrap">
             {["S", "M", "L", "XL", "XXL"].map((size) => (
               <motion.button
                 key={size}
                 type="button"
                 onClick={() => toggleSize(size)}
-                className={`px-4 py-2 rounded-full border text-sm sm:text-base font-sans transition-all ${
+                className={`px-3 py-1 sm:px-4 sm:py-2 rounded-full border text-xs sm:text-sm md:text-base font-sans transition-all ${
                   sizes.includes(size)
                     ? "bg-gray-900 text-white border-gray-900"
                     : "border-gray-200 text-gray-600 hover:bg-gray-100 hover:border-gray-900"
@@ -253,22 +253,22 @@ const Add = ({ token }) => {
             id="bestseller"
             checked={bestseller}
             onChange={() => setBestseller(!bestseller)}
-            className="w-4 h-4 text-gray-900 border-gray-200 rounded focus:ring-gray-300"
+            className="w-4 h-4 sm:w-5 sm:h-5 text-gray-900 border-gray-200 rounded focus:ring-gray-300"
             aria-label="Mark as bestseller"
           />
           <label
             htmlFor="bestseller"
-            className="text-sm sm:text-base font-medium text-gray-900 font-sans"
+            className="text-xs sm:text-sm md:text-base font-medium text-gray-900 font-sans"
           >
             Bestseller
           </label>
         </div>
 
         {/* Submit */}
-        <div className="text-right">
+        <div className="text-center sm:text-right">
           <motion.button
             type="submit"
-            className="bg-gray-900 text-white px-6 py-3 rounded-lg font-sans text-sm sm:text-base font-semibold hover:bg-gray-800 focus:ring-2 focus:ring-gray-300 transition-colors"
+            className="bg-gray-900 text-white px-4 py-2 sm:px-6 sm:py-3 rounded-lg font-sans text-xs sm:text-sm md:text-base font-semibold hover:bg-gray-800 focus:ring-2 focus:ring-gray-300 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Add product"
