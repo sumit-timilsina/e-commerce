@@ -74,6 +74,9 @@ const Navbar = () => {
           {token ? (
             <>
               <motion.img
+                onClick={() => {
+                  navigate("/login");
+                }}
                 src={assets.profile_icon}
                 alt="Profile"
                 className="w-5 cursor-pointer"
