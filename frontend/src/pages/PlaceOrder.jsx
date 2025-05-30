@@ -5,6 +5,7 @@ import { assets } from "../assets/frontend_assets/assets";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { motion } from 'framer-motion';
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState("cod");
@@ -18,7 +19,6 @@ const PlaceOrder = () => {
     getCartAmount,
     products,
   } = useContext(ShopContext);
-  
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -33,14 +33,18 @@ const PlaceOrder = () => {
   });
 
   const onChangeHandler = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setFormData((data) => ({ ...data, [name]: value }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
   const onSubmitHandler = async (e) => {
-    
     e.preventDefault();
+    if (!token) {
+      toast.error("Please log in to place an order");
+      navigate("/login");
+      return;
+    }
+
     try {
       let orderItems = [];
       for (const items in cartItems) {
@@ -57,325 +61,312 @@ const PlaceOrder = () => {
           }
         }
       }
-      console.log(orderItems);
+
+      if (orderItems.length === 0) {
+        toast.error("Your cart is empty");
+        navigate("/cart");
+        return;
+      }
 
       let orderData = {
         address: formData,
         items: orderItems,
         amount: getCartAmount() + delivery_fee,
       };
+
       switch (method) {
-        
         case "cod":
           const response = await axios.post(
-            backendUrl + "/api/order/place",
+            `${backendUrl}/api/order/place`,
             orderData,
-            { headers: { Authorization: token } }
+            { headers: { Authorization: `Bearer ${token}` } }
           );
-          
-
           if (response.data.success) {
             setCartItems({});
-            navigate('/orders')
-          }
-          else{
-            toast.error(response.data.message || "Order Failed");
+            navigate("/orders");
+            toast.success("Order placed successfully!");
+          } else {
+            toast.error(response.data.message || "Failed to place order");
           }
           break;
 
         case "stripe":
           const responseStripe = await axios.post(
-            backendUrl + "/api/order/stripe",
+            `${backendUrl}/api/order/stripe`,
             orderData,
-            { headers: { Authorization: token } }
-          )
-
-          if(responseStripe.data.success){
-            const {session_url} = responseStripe.data;
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          if (responseStripe.data.success) {
+            const { session_url } = responseStripe.data;
             window.location.replace(session_url);
+          } else {
+            toast.error(responseStripe.data.message || "Failed to process payment");
           }
-          else{
-            toast.error(responseStripe.data.message || "Order Failed");
-          }
-        break;
-        
+          break;
 
         default:
           break;
       }
     } catch (error) {
-      console.error("Error placing order:", error);
-      toast.error(error.message || "Order Failed");
+      toast.error(error.response?.data?.message || "Failed to place order");
     }
   };
 
   return (
-    <div className="bg-gray-50 py-8 lg:py-12">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <form
-          onSubmit={onSubmitHandler}
-          className="lg:grid lg:grid-cols-5 lg:gap-8"
+    <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
+      <motion.form
+        onSubmit={onSubmitHandler}
+        className="flex flex-col lg:flex-row lg:gap-8"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
+        {/* Left side - Delivery Info */}
+        <motion.div
+          className="space-y-6 mb-8 lg:mb-0 lg:flex-1"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
         >
-          {/* Left side - Delivery Info */}
-          <div className="space-y-6 mb-8 lg:mb-0 lg:col-span-3">
-            <Title text1={"DELIVERY"} text2={"INFORMATION"} />
-            <div className="bg-white rounded-md shadow p-4 sm:p-6">
-              <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-4">
-                <div>
-                  <label
-                    htmlFor="firstName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    First Name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="firstName"
-                      value={formData.firstName}
-                      type="text"
-                      id="firstName"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="John"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="lastName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Last Name
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="lastName"
-                      value={formData.lastName}
-                      type="text"
-                      id="lastName"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Doe"
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Email
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="email"
-                      value={formData.email}
-                      type="email"
-                      id="email"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="street"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Street
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="street"
-                      value={formData.street}
-                      type="text"
-                      id="street"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="123 Main St"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="city"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    City
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="city"
-                      value={formData.city}
-                      type="text"
-                      id="city"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="Anytown"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="state"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    State
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="state"
-                      value={formData.state}
-                      type="text"
-                      id="state"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="CA"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="zipCode"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    ZIP
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="zipCode"
-                      value={formData.zipCode}
-                      type="text"
-                      id="zipCode"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="12345"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="country"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Country
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      name="country"
-                      value={formData.country}
-                      type="text"
-                      id="country"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="USA"
-                    />
-                  </div>
-                </div>
-                <div className="sm:col-span-2">
-                  <label
-                    htmlFor="phoneNumber"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Phone
-                  </label>
-                  <div className="mt-1">
-                    <input
-                      required
-                      onChange={onChangeHandler}
-                      type="number"
-                      id="phoneNumber"
-                      className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                      placeholder="555-123-4567"
-                    />
-                  </div>
-                </div>
+          <Title text1={"DELIVERY"} text2={"INFORMATION"} />
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+            <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-6">
+              <div>
+                <label
+                  htmlFor="firstName"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  First Name
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="firstName"
+                  value={formData.firstName}
+                  type="text"
+                  id="firstName"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="John"
+                  aria-label="First Name"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="lastName"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  Last Name
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="lastName"
+                  value={formData.lastName}
+                  type="text"
+                  id="lastName"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="Doe"
+                  aria-label="Last Name"
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  Email
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="email"
+                  value={formData.email}
+                  type="email"
+                  id="email"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="you@example.com"
+                  aria-label="Email Address"
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="street"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  Street
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="street"
+                  value={formData.street}
+                  type="text"
+                  id="street"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="123 Main St"
+                  aria-label="Street Address"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="city"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  City
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="city"
+                  value={formData.city}
+                  type="text"
+                  id="city"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="Anytown"
+                  aria-label="City"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="state"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  State
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="state"
+                  value={formData.state}
+                  type="text"
+                  id="state"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="CA"
+                  aria-label="State"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="zipCode"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  ZIP
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="zipCode"
+                  value={formData.zipCode}
+                  type="text"
+                  id="zipCode"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="12345"
+                  aria-label="ZIP Code"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="country"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  Country
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="country"
+                  value={formData.country}
+                  type="text"
+                  id="country"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="USA"
+                  aria-label="Country"
+                />
+              </div>
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="phoneNumber"
+                  className="block text-sm sm:text-base font-medium text-gray-900 font-sans"
+                >
+                  Phone
+                </label>
+                <input
+                  required
+                  onChange={onChangeHandler}
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  type="tel"
+                  id="phoneNumber"
+                  className="mt-2 w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+                  placeholder="555-123-4567"
+                  aria-label="Phone Number"
+                />
               </div>
             </div>
           </div>
+        </motion.div>
 
-          {/* Right side - Cart Total and Payment */}
-          <div className="lg:col-span-2">
-            <div className="space-y-6">
-              <CartTotal />
-
-              <div className="bg-white rounded-md shadow p-4 sm:p-6">
-                <Title text1={"PAYMENT"} text2={"METHOD"} />
-                <div className="mt-4 grid grid-cols-3 gap-4">
-                  <div
-                    onClick={() => setMethod("stripe")}
-                    className={`relative flex items-center justify-center p-3 border rounded-md hover:shadow cursor-pointer ${
-                      method === "stripe"
-                        ? "border-indigo-500 shadow-md"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {method === "stripe" && (
-                      <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-green-500 rounded-full"></span>
-                    )}
-                    <img
-                      src={assets.stripe_logo}
-                      alt="Stripe"
-                      className="w-auto max-h-8 object-contain"
-                    />
-                  </div>
-
-                  {/* <div
-                    onClick={() => setMethod("razorpay")}
-                    className={`relative flex items-center justify-center p-3 border rounded-md hover:shadow cursor-pointer ${
-                      method === "razorpay"
-                        ? "border-indigo-500 shadow-md"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {method === "razorpay" && (
-                      <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-green-500 rounded-full"></span>
-                    )}
-                    <img
-                      src={assets.razorpay_logo}
-                      alt="Razorpay"
-                      className="w-auto max-h-8 object-contain"
-                    />
-                  </div> */}
-
-                  <div
-                    onClick={() => setMethod("cod")}
-                    className={`relative flex items-center justify-center p-3 border rounded-md hover:shadow cursor-pointer ${
-                      method === "cod"
-                        ? "border-indigo-500 shadow-md"
-                        : "border-gray-300"
-                    }`}
-                  >
-                    {method === "cod" && (
-                      <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-green-500 rounded-full"></span>
-                    )}
-                    <span className="font-medium text-gray-700 text-sm">
-                      COD
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <button
-                type="submit"
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 text-sm"
+        {/* Right side - Cart Total and Payment */}
+        <motion.div
+          className="lg:w-[450px] space-y-6"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut', delay: 0.4 }}
+        >
+          <CartTotal />
+          <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+            <Title text1={"PAYMENT"} text2={"METHOD"} />
+            <div className="mt-4 grid grid-cols-2 gap-4">
+              <motion.button
+                type="button"
+                onClick={() => setMethod("stripe")}
+                className={`relative flex items-center justify-center p-4 border rounded-lg hover:shadow-sm cursor-pointer transition-all ${
+                  method === "stripe" ? "border-gray-900 shadow-md" : "border-gray-200"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Select Stripe payment method"
               >
-                PLACE ORDER
-              </button>
+                {method === "stripe" && (
+                  <span className="absolute top-2 right-2 w-3 h-3 bg-green-500 rounded-full"></span>
+                )}
+                <img
+                  src={assets.stripe_logo}
+                  alt="Stripe Payment"
+                  className="w-auto max-h-8 object-contain"
+                />
+              </motion.button>
+              <motion.button
+                type="button"
+                onClick={() => setMethod("cod")}
+                className={`relative flex items-center justify-center p-4 border rounded-lg hover:shadow-sm cursor-pointer transition-all ${
+                  method === "cod" ? "border-gray-900 shadow-md" : "border-gray-200"
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Select Cash on Delivery payment method"
+              >
+                {method === "cod" && (
+                  <span className="absolute top-2 right-2 w-3 h-3 bg-green-500 rounded-full"></span>
+                )}
+                <span className="font-medium text-gray-900 font-sans text-sm sm:text-base">
+                  COD
+                </span>
+              </motion.button>
             </div>
           </div>
-        </form>
-      </div>
-    </div>
+          <motion.button
+            type="submit"
+            className="w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-sans text-sm sm:text-base font-semibold hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Place Order"
+          >
+            PLACE ORDER
+          </motion.button>
+        </motion.div>
+      </motion.form>
+    </section>
   );
 };
 

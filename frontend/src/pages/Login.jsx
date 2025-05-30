@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { ShopContext } from "../context/ShopContext";
+import { motion } from 'framer-motion';
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("signup");
@@ -19,13 +20,13 @@ const Login = () => {
       let response;
       if (currentState === "signup") {
         response = await axios.post(`${backendUrl}/api/user/register`, {
-          name,
-          email,
+          name: name.trim(),
+          email: email.trim(),
           password,
         });
       } else {
         response = await axios.post(`${backendUrl}/api/user/login`, {
-          email,
+          email: email.trim(),
           password,
         });
       }
@@ -34,80 +35,112 @@ const Login = () => {
         toast.success(`${currentState === "signup" ? "Registered" : "Logged in"} successfully!`);
         setToken(response.data.token);
         localStorage.setItem("token", response.data.token);
-        navigate("/"); // redirect to homepage or dashboard
+        navigate("/"); // Redirect to homepage
       } else {
         toast.error("Something went wrong.");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error occurred");
+      toast.error(error.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form
+    <section className="flex items-center justify-center min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-8">
+      <motion.form
         onSubmit={onSubmitHandler}
-        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md"
+        className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm w-full max-w-md"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
       >
         <div className="mb-6 text-center">
-          <h2 className="text-2xl font-bold text-gray-800 capitalize">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 font-sans capitalize">
             {currentState === "login" ? "Login" : "Sign Up"}
           </h2>
         </div>
 
         {currentState === "signup" && (
-          <input
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md"
-          />
+          <div className="mb-4">
+            <input
+              type="text"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+              aria-label="Full Name"
+            />
+          </div>
         )}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          className="w-full mb-6 px-4 py-2 border border-gray-300 rounded-md"
-        />
+        <div className="mb-4">
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+            aria-label="Email Address"
+          />
+        </div>
+        <div className="mb-6">
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg text-gray-600 font-sans text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-gray-300"
+            aria-label="Password"
+          />
+        </div>
 
-        <div className="flex items-center justify-between text-sm text-gray-600 mb-6">
-          <p className="cursor-pointer hover:underline">Forgot password?</p>
+        <div className="flex items-center justify-between text-sm sm:text-base text-gray-600 font-sans mb-6">
+          <button
+            type="button"
+            className="hover:text-gray-900 hover:underline transition-colors"
+            onClick={() => navigate("/forgot-password")} // Placeholder route
+            aria-label="Forgot password"
+          >
+            Forgot password?
+          </button>
           {currentState === "login" ? (
-            <p onClick={() => setCurrentState("signup")} className="text-blue-600 cursor-pointer hover:underline">
+            <button
+              type="button"
+              onClick={() => setCurrentState("signup")}
+              className="text-gray-900 hover:underline transition-colors"
+              aria-label="Switch to sign up"
+            >
               Create account
-            </p>
+            </button>
           ) : (
-            <p onClick={() => setCurrentState("login")} className="text-blue-600 cursor-pointer hover:underline">
+            <button
+              type="button"
+              onClick={() => setCurrentState("login")}
+              className="text-gray-900 hover:underline transition-colors"
+              aria-label="Switch to login"
+            >
               Login Here
-            </p>
+            </button>
           )}
         </div>
 
-        <button
+        <motion.button
           type="submit"
           disabled={loading}
-          className={`w-full bg-blue-600 text-white py-2 rounded-md transition ${
-            loading ? "opacity-60 cursor-not-allowed" : "hover:bg-blue-700"
+          className={`w-full bg-gray-900 text-white px-6 py-3 rounded-lg font-sans text-sm sm:text-base font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 ${
+            loading ? "opacity-60 cursor-not-allowed" : "hover:bg-gray-800"
           }`}
+          whileHover={{ scale: loading ? 1 : 1.05 }}
+          whileTap={{ scale: loading ? 1 : 0.95 }}
+          aria-label={currentState === "login" ? "Sign In" : "Sign Up"}
         >
           {loading ? "Loading..." : currentState === "login" ? "Sign In" : "Sign Up"}
-        </button>
-      </form>
-    </div>
+        </motion.button>
+      </motion.form>
+    </section>
   );
 };
 
