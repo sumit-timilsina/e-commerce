@@ -24,12 +24,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white py-5 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-center font-sans">
+    <nav className="bg-white py-2 px-4 sm:px-6 lg:px-2 max-w-7xl mx-auto flex justify-between items-center font-sans">
       {/* Logo */}
       <Link to="/">
         <motion.img
-          src={assets1.logo}
-          className="w-32"
+          src={assets.logo}
+          className="w-20"
           alt="Nexus Logo"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

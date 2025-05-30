@@ -14,7 +14,7 @@ const Footer = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
         >
-          <img src={assets.logo} alt="Nexus Logo" className="w-32 mb-6" />
+          <img src={assets.logo} alt="Nexus Logo" className="w-20 mb-6" />
           <p className="text-sm sm:text-base font-sans leading-relaxed max-w-md text-gray-600">
             At Nexus, we’re dedicated to bringing you quality products with a personal touch. Explore our curated collections and enjoy a seamless shopping experience tailored just for you.
           </p>

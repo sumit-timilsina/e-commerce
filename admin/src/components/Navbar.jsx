@@ -10,8 +10,8 @@ const Navbar = ({ setToken }) => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-      <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-4 max-w-7xl mx-auto">
-        <img src={assets} alt="Admin Panel Logo" className="h-8 sm:h-10 w-auto" />
+      <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <img src={assets} alt="Admin Panel Logo" className="h-15 sm:h-20 w-auto" />
         <motion.button
           onClick={() => setToken('')}
           className="px-4 py-2 bg-gray-900 text-white font-sans text-sm sm:text-base font-semibold rounded-lg hover:bg-gray-800 focus:ring-2 focus:ring-gray-300 transition-colors"
