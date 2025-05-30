@@ -39,10 +39,7 @@ const Product = () => {
     toast.success('Added to cart!');
   };
 
-  const getSizes = () => {
-    if (!productData?.sizes) return [];
-    return typeof productData.sizes === 'string' ? JSON.parse(productData.sizes) : productData.sizes;
-  };
+
 
   return (
     <section className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto bg-white">
@@ -142,7 +139,7 @@ const Product = () => {
                   Select Size
                 </p>
                 <div className="flex gap-2 flex-wrap">
-                  {getSizes().map((item, index) => (
+                  {JSON.parse(productData.sizes).map((item, index) => (
                     <motion.button
                       key={index}
                       onClick={() => setSize(item)}
