@@ -26,7 +26,7 @@ const Contact = () => {
       >
         <img
           src={assets.contact_img}
-          alt="Forever Style Store Front"
+          alt="Nexus Style Store Front"
           className="w-full rounded-xl shadow-sm"
         />
         <div className="space-y-6">
@@ -39,11 +39,11 @@ const Contact = () => {
           </p>
           <p className="text-sm sm:text-base text-gray-600 font-sans">
             Tel: <a href="tel:+9779801234567" className="hover:text-gray-900 transition-colors" aria-label="Call us at +977 980-1234567">+977 980-1234567</a><br />
-            Email: <a href="mailto:support@foreverstyle.com" className="hover:text-gray-900 transition-colors" aria-label="Email us at support@foreverstyle.com">support@foreverstyle.com</a>
+            Email: <a href="mailto:support@Nexusstyle.com" className="hover:text-gray-900 transition-colors" aria-label="Email us at support@Nexusstyle.com">support@Nexusstyle.com</a>
           </p>
           <div className="pt-2">
             <h4 className="text-base sm:text-lg font-semibold text-gray-900 font-sans">
-              Careers at Forever
+              Careers at Nexus
             </h4>
             <p className="text-sm sm:text-base text-gray-600 font-sans mt-2 mb-4 leading-relaxed">
               Join our team and help shape the future of fashion retail. Explore opportunities that value creativity and customer focus.
@@ -52,7 +52,7 @@ const Contact = () => {
               className="bg-gray-900 text-white px-6 py-2 rounded-lg font-sans text-sm sm:text-base font-semibold hover:bg-gray-800 focus:ring-2 focus:ring-gray-300 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              aria-label="Explore job openings at Forever Style"
+              aria-label="Explore job openings at Nexus Style"
             >
               Explore Jobs
             </motion.button>
