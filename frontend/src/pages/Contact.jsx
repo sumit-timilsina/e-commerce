@@ -1,54 +1,75 @@
-import React from 'react'
-import Title from '../components/Title'
-import { assets } from '../assets/frontend_assets/assets'
-import NewsLetterBox from '../components/NewsLetterBox'
+import React from 'react';
+import Title from '../components/Title';
+import { assets } from '../assets/frontend_assets/assets';
+import NewsLetterBox from '../components/NewsLetterBox';
+import { motion } from 'framer-motion';
 
 const Contact = () => {
   return (
-    <div className="bg-gray-50 px-4 sm:px-10 py-12 text-gray-800">
+    <section className="bg-white py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
       {/* Page Title */}
-      <div className="text-center mb-10">
+      <motion.div
+        className="mb-10 text-center"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+      >
         <Title text1={'CONTACT'} text2={'US'} />
-      </div>
+      </motion.div>
 
       {/* Contact Info Section */}
-      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-center mb-16">
+      <motion.div
+        className="grid md:grid-cols-2 gap-8 lg:gap-12 items-center mb-16"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut', delay: 0.2 }}
+      >
         <img
           src={assets.contact_img}
-          alt="Contact Us"
-          className="w-full rounded-xl shadow-md"
+          alt="Nexus Style Store Front"
+          className="w-full rounded-xl shadow-sm"
         />
-
-        <div className="space-y-4">
-          <h3 className="text-xl font-semibold text-gray-800">Our Store</h3>
-          <p className="text-gray-600 leading-relaxed">
+        <div className="space-y-6">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 font-sans">
+            Our Store
+          </h3>
+          <p className="text-sm sm:text-base text-gray-600 font-sans leading-relaxed">
             Kamalbinayak, Bhaktapur<br />
-            Kamalpokhari Area
+            Kamalpokhari Area, Nepal
           </p>
-          <p className="text-gray-600">
-            Tel: <a href="tel:+9779801234567" className="hover:underline">+977 980-1234567</a><br />
-            Email: <a href="mailto:support@foreverstyle.com" className="hover:underline">support@foreverstyle.com</a>
+          <p className="text-sm sm:text-base text-gray-600 font-sans">
+            Tel: <a href="tel:+9779801234567" className="hover:text-gray-900 transition-colors" aria-label="Call us at +977 980-1234567">+977 980-1234567</a><br />
+            Email: <a href="mailto:support@Nexusstyle.com" className="hover:text-gray-900 transition-colors" aria-label="Email us at support@Nexusstyle.com">support@Nexusstyle.com</a>
           </p>
-
-          <div className="pt-4">
-            <h4 className="text-lg font-semibold">Careers at Forever</h4>
-            <p className="text-sm text-gray-600 mb-4">
-              Learn more about our teams and current job openings. Join a company that values creativity,
-              innovation, and customer delight.
+          <div className="pt-2">
+            <h4 className="text-base sm:text-lg font-semibold text-gray-900 font-sans">
+              Careers at Nexus
+            </h4>
+            <p className="text-sm sm:text-base text-gray-600 font-sans mt-2 mb-4 leading-relaxed">
+              Join our team and help shape the future of fashion retail. Explore opportunities that value creativity and customer focus.
             </p>
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+            <motion.button
+              className="bg-gray-900 text-white px-6 py-2 rounded-lg font-sans text-sm sm:text-base font-semibold hover:bg-gray-800 focus:ring-2 focus:ring-gray-300 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label="Explore job openings at Nexus Style"
+            >
               Explore Jobs
-            </button>
+            </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Newsletter Box */}
-      <div className="max-w-3xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
+      >
         <NewsLetterBox />
-      </div>
-    </div>
-  )
-}
+      </motion.div>
+    </section>
+  );
+};
 
-export default Contact
+export default Contact;
